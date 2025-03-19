@@ -7,17 +7,12 @@ REM ³
 cls
 REM ÃÄ Set Codepage 437 to enable Box Drawing Characters
 chcp 437 >nul
-REM ÃÄ See if /debug was included with the instantiating command
-set "DEBUG=%1"
 REM ÃÄ Generate a random number for our temporary file that commits variable changes to the calling command prompt session
 set "RN=_%random%"
 REM ÃÄ
 set "TempCommandsFile=%temp%\tempCommands%RN%"
-if "%debug%"=="/debug" (echo PROGRAM START: The Batch File Will Be Called: %TempCommandsFile% && pause)
 goto :MAINLOOP
 REM ÀÄÄ end of "SetJavaVersion.bat" Main Routine ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-
-
 
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :MAINLOOP ²²²
@@ -40,31 +35,10 @@ REM ³
       REM ÃÄ Runs the created batch file outside of the setlocal context on every loop.  This has 
       REM ÃÄ the advantage that if the batch is interrupted (eg crtl-c instead of via the menu)
       REM ÃÄ the changes will still be reflected in the instantiating Command Prompt environment.
-      if "%debug%"=="/debug" if exist %TempCommandsFile%.bat (
-            echo TEMPORARY BATCHFILE
-            echo -------------------
-            type %TempCommandsFile%.bat
-            echo -------------------
-            pause 
-            echo MAINLOOP: About To Run %TempCommandsFile%.bat 
-            pause
-            )
       if exist %TempCommandsFile%.bat call %TempCommandsFile%.bat    
-      if "%debug%"=="/debug" (
-            echo MAINLOOP: Just Ran %TempCommandsFile%.bat 
-            pause
-            echo MAINLOOP: About To Delete %TempCommandsFile%.bat 
-            pause
-            )
       if exist %TempCommandsFile%.bat del %TempCommandsFile%.bat
-      if "%debug%"=="/debug" (
-            echo MAINLOOP: Just deleted %TempCommandsFile%.bat 
-            pause
-            )
       goto :MAINLOOP
 REM ÀÄÄ end of MAINLOOP ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-
-
 
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :GET_JDK_INFO ²²²
@@ -76,8 +50,6 @@ REM ³
       java -version
       exit /b
 REM ÀÄÄ end of :GET_JDK_INFO ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-
-
 
 REM ²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :MENU ²²²
@@ -119,8 +91,6 @@ REM ³
       exit /b
 REM ÀÄÄ end of :MENU ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
-
-
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :SET_ORACLE ²²²
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
@@ -128,20 +98,12 @@ REM ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 REM ³ Sets JAVA_HOME to Oracle JDK 23 and updates environment variables
 REM ³
       :SET_ORACLE
-      if "%debug%"=="/debug" (
-            echo SET_ORACLE: Reached the SET_ORACLE Subroutine 
-            echo Setting Default JDK to Oracle jdk-23 by
-            echo Setting JAVA_HOME to "C:\Program Files\Java\jdk-23"
-            pause
-            )
       setx JAVA_HOME "C:\Program Files\Java\jdk-23" /M >nul
       set "JAVA_HOME=C:\Program Files\Java\jdk-23"
       timeout /t 1 >nul
       call :UPDLOCENVVARS
       exit /b
 REM ÀÄÄ end of :SET_ORACLE ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-
-
 
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :SET_GRAALVM ²²²
@@ -150,20 +112,12 @@ REM ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 REM ³ Sets JAVA_HOME to GraalVM JDK 23 and updates environment variables
 REM ³
       :SET_GRAALVM
-      if "%debug%"=="/debug" (
-            echo SET_GRAALVM: Reached the SET_GRAALVM Subroutine 
-            echo Setting Default JDK to graalvm jdk-23 by
-            echo setting JAVA_HOME to C:\Program Files\Java\graalvm-jdk-23.0.2+7.1
-            pause
-            )      
       setx JAVA_HOME "C:\Program Files\Java\graalvm-jdk-23.0.2+7.1" /M >nul
       set "JAVA_HOME=C:\Program Files\Java\graalvm-jdk-23.0.2+7.1"
       timeout /t 1 >nul
       call :UPDLOCENVVARS
       exit /b
 REM ÀÄÄ end of :SET_GRAALVM ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-
-
 
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :UPDLOCENVVARS ²²²
@@ -179,10 +133,6 @@ REM ³       and wont remove SYSTEM or USER environment variables deleted after t
 REM ³       instantiating command prompt session is opened.
 REM ³
       :UPDLOCENVVARS
-      if "%debug%"=="/debug" (
-            echo UPDLOCENVVARS: Reached the UPDLOCENVVARS Subroutine 
-            pause
-            )      
       set "RegLoc=HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
       call :REFRESH_LOCAL_ENV
       set "RegLoc=HKCU\Environment"
@@ -190,8 +140,7 @@ REM ³
       call :UPDATE_JAVA_PATH
       exit /b
 REM ÀÄÄ end of :UPDLOCENVVARS ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
-REM
-REM
+
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :REFRESH_LOCAL_ENV ²²²
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
@@ -201,25 +150,17 @@ REM ³and Set the local versions (via SETLOCALENVS) to the same
 REM ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 REM ³
       :REFRESH_LOCAL_ENV
-            if "%debug%"=="/debug" (
-                  echo REFRESH_LOCAL_ENV: Reached the REFRESH_LOCAL_ENV Subroutine 
-                  pause
-                  )
-            for /f "tokens=1,2,*" %%i in ('reg query "%RegLoc%" 2^>nul') do (
-                  set "var1=%%i" && for /f "tokens=*" %%a in ("!var1!") do set "var1=%%a"
-                  set "var2=%%j" && for /f "tokens=*" %%a in ("!var2!") do set "var2=%%a"
-                  set "var3=%%k" && for /f "tokens=*" %%a in ("!var3!") do set "var3=%%a"
-                  if "!var2!"=="REG_SZ" (
-                        call :SETLOCALENVS "!var1!" "!var2!" "!var3!"
-                  ) else if "!var2!"=="REG_EXPAND_SZ" (
-                        call :SETLOCALENVS "!var1!" "!var2!" "!var3!"
-                  )
+      for /f "tokens=1,2,*" %%i in ('reg query "%RegLoc%" 2^>nul') do (
+            set "var1=%%i" && for /f "tokens=*" %%a in ("!var1!") do set "var1=%%a"
+            set "var2=%%j" && for /f "tokens=*" %%a in ("!var2!") do set "var2=%%a"
+            set "var3=%%k" && for /f "tokens=*" %%a in ("!var3!") do set "var3=%%a"
+            if "!var2!"=="REG_SZ" (
+                  call :SETLOCALENVS "!var1!" "!var2!" "!var3!"
+            ) else if "!var2!"=="REG_EXPAND_SZ" (
+                  call :SETLOCALENVS "!var1!" "!var2!" "!var3!"
             )
-            if "%debug%"=="/debug" (
-                  echo REFRESH_LOCAL_ENV: Temporary Batch File Name = %TempCommandsFile%.bat 
-                  pause
-                  )         
-            exit /b
+      )
+      exit /b
 REM ÀÄÄ end of :REFRESH_LOCAL_ENV ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
 REM
 REM
@@ -231,35 +172,13 @@ REM ³Sets the local variables to the inputs
 REM ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 REM ³
       :SETLOCALENVS
-            if "%debug%"=="/debug" (
-                  rem echo SETLOCALENVS: Reached the SETLOCALENVS Subroutine
-                  )
-            if /i "%~1"=="PATH" exit /b      
-            set "text= Û Setting Local Session Variable %1 to %3"
-            if "%debug%"=="/debug" (call :LLECHO)
-            REM Write the set command to the temp file instead of setting it directly            
-            echo set "%~1=%~3">>%TempCommandsFile%.bat            
-            exit /b
+      if /i "%~1"=="PATH" exit /b      
+      set "text= Û Setting Local Session Variable %1 to %3"
+      REM Write the set command to the temp file instead of setting it directly            
+      echo set "%~1=%~3">>%TempCommandsFile%.bat            
+      exit /b
 
 REM ÀÄÄ end of :SETLOCALENVS ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ    
-REM
-REM
-REM ²²²²²²²²²²²²²²²²²²²²²²²²²²
-REM ²²² SUBROUTINE :LLECHO ²²²
-REM ²²²²²²²²²²²²²²²²²²²²²²²²²²
-REM ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-REM ³ LLECHO Ä A Subroutine to insert a line wrap after 132 characters of the text variable
-REM ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-REM ³
-      :LLECHO
-            if defined text (
-                  echo  Û !text:~3,132!
-                  set "text=!text:~132!"
-                  goto :LLECHO
-            )
-      exit /b
-REM ÀÄÄ end of :LLECHO ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
-
 
 REM ²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²²
 REM ²²² SUBROUTINE :UPDATE_JAVA_PATH ²²²
@@ -270,10 +189,6 @@ REM ³ and prepends the new %JAVA_HOME%\bin. Writes the result to the temp batch 
 REM ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 REM ³
       :UPDATE_JAVA_PATH
-      if "%debug%"=="/debug" (
-            echo CLEAN_JAVA_PATH: Reached the CLEAN_JAVA_PATH Subroutine 
-            pause
-            )
       REM Store the current PATH and initialize new PATH
       set "OLD_PATH=%PATH%"
       set "NEW_PATH=%JAVA_HOME%\bin"
@@ -293,10 +208,8 @@ REM ³
                   )
             )            
       REM Write the cleaned PATH to the temp batch file
-      if "%debug%"=="/debug" (echo new path -- !NEW_PATH!)
       setx PATH "!NEW_PATH!" /M >nul
       echo set "PATH=!NEW_PATH!">>%TempCommandsFile%.bat
-      if "%debug%"=="/debug" (echo CLEAN_JAVA_PATH: New PATH written: !NEW_PATH! && pause)
       exit /b
 REM ÀÄÄ end of :UPDATE_JAVA_PATH ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
