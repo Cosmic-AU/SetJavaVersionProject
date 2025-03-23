@@ -16,7 +16,7 @@ set "TempCommandsFile=%temp%\tempCommands%RN%"
 if "%debug%"=="/debug" (echo PROGRAM START: The Batch File Will Be Called: %TempCommandsFile% && pause)
 goto :MAINLOOP
 REM 읕� end of "SetJavaVersion.bat" Main Routine 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
-
+ 
 
 
 REM 께께께께께께께께께께께께께께
